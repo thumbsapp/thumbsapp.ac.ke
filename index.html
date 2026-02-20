@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>ThumbsApp · master fusion · three‑column arena</title>
+  <title>ThumbsApp · ultimate three‑column · trending news integrated</title>
   <!-- Google Fonts & Font Awesome -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* ===== GLOBAL RESET & VARIABLES ===== (merged from all three files) */
+    /* ===== RESET & VARIABLES (merged from all three sources) ===== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --background: 210 40% 98%;
@@ -164,15 +164,20 @@
     .intermediate { background: hsl(var(--warning) / 0.1); color: hsl(var(--warning)); border: 1px solid hsl(var(--warning) / 0.2); }
     .advanced { background: hsl(var(--destructive) / 0.1); color: hsl(var(--destructive)); border: 1px solid hsl(var(--destructive) / 0.2); }
 
-    /* ===== TRENDING NEWS (dynamic grid) ===== */
-    .trending-grid { display: flex; flex-direction: column; gap: 0.8rem; }
-    .news-item {
-      padding: 0.8rem; border-radius: 0.8rem; background: hsl(var(--muted) / 0.3);
-      border-left: 4px solid hsl(var(--primary)); cursor: pointer; transition: 0.1s;
+    /* ===== TRENDING NEWS SECTION (dynamic grid) ===== */
+    .trending-grid {
+      display: flex; flex-direction: column; gap: 0.8rem;
+      max-height: 300px; overflow-y: auto; padding-right: 4px;
     }
-    .news-item:hover { background: hsl(var(--muted)); }
-    .news-item h4 { font-size: 0.95rem; font-weight: 600; }
-    .news-item p { font-size: 0.75rem; color: var(--text-secondary); }
+    .news-item {
+      padding: 1rem; border-radius: 0.8rem; background: hsl(var(--muted) / 0.3);
+      border-left: 4px solid hsl(var(--primary)); cursor: pointer; transition: 0.2s;
+      display: flex; flex-direction: column; gap: 0.2rem;
+    }
+    .news-item:hover { background: hsl(var(--muted)); transform: translateX(4px); }
+    .news-item h4 { font-size: 1rem; font-weight: 600; }
+    .news-item .meta { font-size: 0.75rem; color: var(--text-secondary); display: flex; gap: 1rem; }
+    .news-item i { margin-right: 0.3rem; color: hsl(var(--primary)); }
 
     /* ===== ARENA / REACTION GAME ===== */
     .arena-card { background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; border: none; }
@@ -230,7 +235,6 @@
     .page { display: none; }
     .page.active { display: block; }
 
-    /* misc */
     .spinner { border: 3px solid hsl(var(--border)); border-top-color: hsl(var(--primary)); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
@@ -296,19 +300,26 @@
       </div>
     </aside>
 
-    <!-- MAIN CENTER (feed, pages) -->
+    <!-- MAIN CENTER (feed + pages) -->
     <main class="feed" id="mainContent">
-      <!-- HOME PAGE (with trending news) -->
+      <!-- HOME PAGE (with TRENDING NEWS section) -->
       <div id="home-page" class="page active">
         <div class="card create-post">
           <div class="avatar small" id="postAvatar">P</div>
           <input type="text" placeholder="Create a challenge, share victory..." onclick="app.openCreateModal()">
         </div>
-        <!-- Trending News dynamic section -->
+        
+        <!-- TRENDING NEWS – dynamic section (fully integrated) -->
         <div class="card">
-          <h3><i class="fas fa-fire" style="color:hsl(var(--primary));"></i> Trending News</h3>
-          <div class="trending-grid" id="trendingNewsContainer"></div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+            <i class="fas fa-fire" style="color: hsl(var(--primary)); font-size: 1.5rem;"></i>
+            <h3 style="margin:0;">Trending News</h3>
+          </div>
+          <div class="trending-grid" id="trendingNewsContainer">
+            <!-- will be populated by javascript -->
+          </div>
         </div>
+
         <!-- Feed posts -->
         <div id="feedContainer"><div class="spinner"></div></div>
         <button class="btn btn-outline" style="width:100%; margin-top:1rem;" onclick="app.loadMore()" id="loadMoreBtn">Load More</button>
@@ -334,7 +345,7 @@
         </div>
       </div>
 
-      <!-- TOURNAMENTS PAGE (placeholder with dynamic join simulation) -->
+      <!-- TOURNAMENTS PAGE -->
       <div id="tournaments-page" class="page">
         <div class="card">
           <h2>🏆 Active tournaments</h2>
@@ -394,7 +405,7 @@
       <div class="footer-section"><h4>Platform</h4><ul><li><a onclick="app.navigate('home')">Home</a></li><li><a onclick="app.navigate('arena')">Arena</a></li></ul></div>
       <div class="footer-section"><h4>Legal</h4><ul><li><a onclick="app.showAgeVerification()">Age verification</a></li></ul></div>
     </div>
-    <div style="text-align:center; margin-top:2rem; color:var(--text-secondary);">© 2026 ThumbsApp · three‑column master fusion</div>
+    <div style="text-align:center; margin-top:2rem; color:var(--text-secondary);">© 2026 ThumbsApp · ultimate three‑column</div>
   </footer>
 
   <!-- MODALS (auth, create, donation) -->
@@ -439,7 +450,7 @@
 
   <script>
     (function() {
-      // ---------- ENHANCED MOCK DATABASE (full backend simulation) ----------
+      // ---------- ENHANCED MOCK DATABASE ----------
       class Database {
         constructor() {
           this.users = new Map(); this.posts = new Map(); this.tournaments = new Map();
@@ -475,7 +486,7 @@
         query(q) { q=q.toLowerCase(); let ans='I found gaming info.'; for(let k in this.kb) if(q.includes(k.split(' ')[0])) ans=this.kb[k]; return { answer:ans, sources:['wikiKB'], time:95 }; }
       }
 
-      // ---------- MAIN APP (THREE COLUMN + ALL FEATURES) ----------
+      // ---------- MAIN APP ----------
       window.app = new class ThumbsApp {
         constructor() {
           this.db = new Database(); this.gameEngine = new GameEngine(); this.wikiAI = new WikiAI();
@@ -484,11 +495,14 @@
           this.chatHistory = [
             {user:'ProGamer', msg:'gg'}, {user:'GameMaster', msg:'wp'}
           ];
+          // TRENDING NEWS ARTICLES (dynamic)
           this.newsArticles = [
-            { title:'ProGamer wins 10k THB', source:'ESPN', time:'2h' },
-            { title:'Memory Match 2.0 released', source:'GameSpot', time:'5h' },
-            { title:'Reaction Duel new map', source:'Thumbs', time:'1d' },
-            { title:'Chess tourney this weekend', source:'Gaming Weekly', time:'3h' }
+            { title: 'ProGamer wins 10k THB Championship', source: 'ESPN', time: '2h ago', icon: '🏆' },
+            { title: 'Memory Match 2.0 releases with new levels', source: 'GameSpot', time: '5h ago', icon: '🧠' },
+            { title: 'Reaction Duel gets major update', source: 'Thumbs Insider', time: '1d ago', icon: '⚡' },
+            { title: 'Speed Chess tournament this weekend', source: 'Gaming Weekly', time: '3h ago', icon: '♟️' },
+            { title: 'New anti-cheat system deployed', source: 'TechRadar', time: '7h ago', icon: '🛡️' },
+            { title: 'ThumbsApp reaches 1M users', source: 'Bloomberg', time: '1d ago', icon: '📈' }
           ];
           this.init();
         }
@@ -515,14 +529,25 @@
           }
         }
         navigate(p) { document.querySelectorAll('.page').forEach(el=>el.classList.remove('active')); document.getElementById(p+'-page').classList.add('active'); this.currentPage=p; if(p==='wiki') this.renderWiki(); }
+        
+        // Feed
         renderFeed() { let cont=document.getElementById('feedContainer'); if(!cont) return; let posts=this.db.getPosts(this.postsPerPage, this.postOffset); if(posts.length===0) { cont.innerHTML='<div class="card">No posts yet</div>'; return; } let html=''; for(let p of posts) { html+=`<div class="card"><div class="post-header"><div class="avatar small">${p.author[0]}</div><div><h4>${p.author}</h4><span>${this.formatTime(p.timestamp)}</span></div></div><div>${p.content}</div><div><span class="difficulty-badge ${p.difficulty}">${p.difficulty}</span></div><div class="post-actions"><div class="post-action" onclick="app.likePost('${p.id}')"><i class="fas fa-thumbs-up"></i> ${p.likes}</div><div class="post-action" onclick="app.joinChallenge('${p.id}')">Join</div></div></div>`; } cont.innerHTML=html; }
         likePost(id) { this.db.likePost(id); this.renderFeed(); this.showToast('Liked!'); }
         joinChallenge(id) { if(!this.currentUser) { this.showLogin(); return; } let post=this.db.posts.get(id); if(post&&post.entryFee<=this.currentUser.balance) { this.db.addTransaction({userId:this.currentUser.id, amount:post.entryFee}); this.currentUser.balance-=post.entryFee; this.updateUIForAuth(); this.showToast('Joined challenge!'); } else this.showToast('insufficient balance','error'); }
         createPost() { if(!this.currentUser) { this.showLogin(); return; } let title=document.getElementById('challengeTitle')?.value||'demo'; let fee=parseInt(document.getElementById('challengeEntryFee')?.value)||10; let p=this.db.createPost({userId:this.currentUser.id, author:this.currentUser.username, content:title, game:'Reaction Duel', entryFee:fee, difficulty:'beginner'}); this.postOffset=0; this.renderFeed(); this.closeModal('createModal'); this.showToast('Challenge created'); }
         loadMore() { this.postOffset+=this.postsPerPage; this.renderFeed(); }
 
-        // Trending News
-        renderTrendingNews() { let cont=document.getElementById('trendingNewsContainer'); if(cont) cont.innerHTML=this.newsArticles.map(n=>`<div class="news-item" onclick="app.showToast('${n.title}')"><h4>🔥 ${n.title}</h4><p>${n.source} · ${n.time}</p></div>`).join(''); }
+        // TRENDING NEWS render
+        renderTrendingNews() {
+          let cont=document.getElementById('trendingNewsContainer');
+          if(!cont) return;
+          cont.innerHTML = this.newsArticles.map(a => `
+            <div class="news-item" onclick="app.showToast('${a.title} · ${a.source}')">
+              <h4><span style="margin-right:0.5rem;">${a.icon}</span> ${a.title}</h4>
+              <div class="meta"><span><i class="fas fa-newspaper"></i> ${a.source}</span> <span><i class="far fa-clock"></i> ${a.time}</span></div>
+            </div>
+          `).join('');
+        }
 
         // WIKI AI
         askWiki() { let inp=document.getElementById('wikiInput'); let q=inp.value.trim(); if(!q) return; let msgBox=document.getElementById('wikiMessages'); msgBox.innerHTML+=`<div class="wiki-message"><strong>You:</strong> ${q}</div>`; inp.value=''; let res=this.wikiAI.query(q); setTimeout(()=>{ msgBox.innerHTML+=`<div class="wiki-message system"><strong>AI:</strong> ${res.answer} <small>${res.time}ms</small></div>`; msgBox.scrollTop=msgBox.scrollHeight; },300); }
