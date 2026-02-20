@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>ThumbsApp · ultimate gaming arena</title>
+  <title>ThumbsApp · master fusion · three‑column arena</title>
   <!-- Google Fonts & Font Awesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&family=Space+Grotesk:wght@400..700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    /* === RESET & GLOBAL VARIABLES (merged from three sources) === */
+    /* ===== GLOBAL RESET & VARIABLES ===== (merged from all three files) */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
       --background: 210 40% 98%;
@@ -20,11 +20,12 @@
       --destructive: 0 84% 60%;
       --muted: 210 40% 96%;
       --border: 214 32% 91%;
-      --radius: 1rem;
-      --header-height: 70px;
-      --transition: all 0.2s ease;
+      --radius: 1.2rem;
+      --header-height: 72px;
+      --transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
       --bg-card: #ffffff;
       --text-secondary: #6b7280;
+      --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
     }
     .dark {
       --background: 222 47% 11%;
@@ -43,10 +44,14 @@
       min-height: 100vh;
       padding-top: var(--header-height);
     }
-    .dark body { background-color: #0f172a; }
-    .container { max-width: 1440px; margin: 0 auto; padding: 0 1.5rem; }
+    .dark body { background: #0f172a; }
 
-    /* === HEADER (unified) === */
+    /* ===== UTILITIES & LAYOUT ===== */
+    .container { max-width: 1440px; margin: 0 auto; padding: 0 1.5rem; }
+    .glass-card { background: hsl(var(--background) / 0.7); backdrop-filter: blur(12px); border: 1px solid hsl(var(--border) / 0.2); border-radius: var(--radius); }
+    .gradient-text { background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent))); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    /* ===== HEADER ===== (unified) */
     .header {
       position: fixed; top: 0; left: 0; right: 0; height: var(--header-height);
       background: hsl(var(--background) / 0.8); backdrop-filter: blur(12px);
@@ -66,9 +71,7 @@
       width: 300px; transition: var(--transition);
     }
     .search-bar:focus-within { border-color: hsl(var(--primary)); box-shadow: 0 0 0 3px hsl(var(--primary) / 0.2); }
-    .search-bar input {
-      background: transparent; border: none; outline: none; color: hsl(var(--foreground)); width: 100%;
-    }
+    .search-bar input { background: transparent; border: none; outline: none; color: hsl(var(--foreground)); width: 100%; }
     .nav-menu { display: flex; align-items: center; gap: 0.5rem; }
     .nav-item {
       padding: 0.5rem 1rem; border-radius: 0.8rem; cursor: pointer; font-weight: 500;
@@ -95,25 +98,21 @@
     }
     .avatar:hover { border-color: hsl(var(--primary)); transform: scale(1.05); }
     .avatar.small { width: 36px; height: 36px; font-size: 0.9rem; }
+    .avatar.large { width: 80px; height: 80px; font-size: 2rem; }
     .dropdown {
       position: absolute; top: calc(100% + 0.8rem); right: 0; background: var(--bg-card);
       border-radius: 0.8rem; border: 1px solid hsl(var(--border)); min-width: 260px;
       opacity: 0; visibility: hidden; transform: translateY(-10px); transition: var(--transition);
-      z-index: 1001; box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.2);
+      z-index: 1001; box-shadow: var(--shadow-lg);
     }
     .dropdown.show { opacity: 1; visibility: visible; transform: translateY(0); }
-    .dropdown-item {
-      padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 0.8rem;
-      cursor: pointer; border-bottom: 1px solid hsl(var(--border)); color: hsl(var(--foreground));
-    }
+    .dropdown-item { padding: 0.9rem 1.2rem; display: flex; align-items: center; gap: 0.8rem; cursor: pointer; border-bottom: 1px solid hsl(var(--border)); color: hsl(var(--foreground)); }
     .dropdown-item:last-child { border-bottom: none; }
     .dropdown-item:hover { background: hsl(var(--muted)); color: hsl(var(--primary)); }
     .theme-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; }
-    .theme-dot.blue { background: #3b82f6; }
-    .theme-dot.pink { background: #ec4899; }
-    .theme-dot.green { background: #10b981; }
+    .theme-dot.blue { background: #3b82f6; } .theme-dot.pink { background: #ec4899; } .theme-dot.green { background: #10b981; } .theme-dot.purple { background: #8b5cf6; }
 
-    /* === MAIN GRID (three‑column layout) === */
+    /* ===== THREE‑COLUMN GRID ===== */
     .main-grid {
       display: grid; grid-template-columns: 280px 1fr 320px; gap: 1.5rem;
       padding: 1.5rem; min-height: calc(100vh - var(--header-height));
@@ -121,33 +120,34 @@
     @media (max-width: 1200px) { .main-grid { grid-template-columns: 240px 1fr; } .right-sidebar { display: none; } }
     @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } .left-sidebar { display: none; } }
 
-    /* === SIDEBARS === */
+    /* ===== SIDEBARS (left & right) ===== */
     .sidebar {
       background: var(--bg-card); border-radius: var(--radius); border: 1px solid hsl(var(--border));
       padding: 1.5rem; height: fit-content; position: sticky; top: calc(var(--header-height) + 1.5rem);
       backdrop-filter: blur(8px);
     }
-    .sidebar-title { font-size: 0.9rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1.2rem; font-weight: 600; }
+    .sidebar-title { font-size: 0.9rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 1.2rem; font-weight: 600; letter-spacing: 0.5px; }
     .sidebar-item {
       display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; border-radius: 0.8rem;
-      cursor: pointer; transition: var(--transition); margin-bottom: 0.2rem;
+      cursor: pointer; transition: var(--transition); margin-bottom: 0.2rem; color: hsl(var(--foreground));
     }
     .sidebar-item:hover { background: hsl(var(--muted)); color: hsl(var(--primary)); }
     .sidebar-item i { width: 22px; color: hsl(var(--primary)); }
     .badge.side { background: hsl(var(--primary)); color: white; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 1rem; margin-left: auto; }
+    .live-badge { background: hsl(var(--destructive)); color: white; padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 600; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-    /* === FEED CARDS === */
+    /* ===== FEED CARDS ===== */
     .feed { display: flex; flex-direction: column; gap: 1.25rem; }
     .card {
       background: var(--bg-card); border-radius: var(--radius); border: 1px solid hsl(var(--border));
       padding: 1.5rem; transition: var(--transition); backdrop-filter: blur(8px);
     }
-    .card:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); border-color: hsl(var(--primary) / 0.3); }
+    .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); border-color: hsl(var(--primary) / 0.3); }
     .create-post { display: flex; align-items: center; gap: 1rem; }
     .create-post input {
       flex: 1; background: hsl(var(--muted)); border: 1px solid hsl(var(--border));
-      border-radius: 2rem; padding: 0.75rem 1.5rem; color: hsl(var(--foreground));
-      outline: none;
+      border-radius: 2rem; padding: 0.75rem 1.5rem; color: hsl(var(--foreground)); outline: none;
     }
     .post-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
     .post-info h4 { font-weight: 600; }
@@ -159,75 +159,84 @@
       border: 1px solid hsl(var(--border)); font-weight: 500;
     }
     .post-action:hover { background: hsl(var(--primary)); color: white; }
-    .difficulty-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+    .difficulty-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin-top: 0.5rem; }
     .beginner { background: hsl(var(--success) / 0.1); color: hsl(var(--success)); border: 1px solid hsl(var(--success) / 0.2); }
     .intermediate { background: hsl(var(--warning) / 0.1); color: hsl(var(--warning)); border: 1px solid hsl(var(--warning) / 0.2); }
     .advanced { background: hsl(var(--destructive) / 0.1); color: hsl(var(--destructive)); border: 1px solid hsl(var(--destructive) / 0.2); }
 
-    /* === TRENDING NEWS (dynamic) === */
-    .trengrid { display: flex; flex-direction: column; gap: 1rem; }
+    /* ===== TRENDING NEWS (dynamic grid) ===== */
+    .trending-grid { display: flex; flex-direction: column; gap: 0.8rem; }
     .news-item {
       padding: 0.8rem; border-radius: 0.8rem; background: hsl(var(--muted) / 0.3);
-      border-left: 3px solid hsl(var(--primary)); cursor: pointer;
+      border-left: 4px solid hsl(var(--primary)); cursor: pointer; transition: 0.1s;
     }
-    .news-item h4 { font-size: 0.95rem; margin-bottom: 0.2rem; }
+    .news-item:hover { background: hsl(var(--muted)); }
+    .news-item h4 { font-size: 0.95rem; font-weight: 600; }
     .news-item p { font-size: 0.75rem; color: var(--text-secondary); }
 
-    /* === ARENA / REACTION === */
+    /* ===== ARENA / REACTION GAME ===== */
     .arena-card { background: linear-gradient(135deg, #1e1b4b, #312e81); color: white; border: none; }
     .duel-area { display: flex; align-items: center; justify-content: space-around; margin: 2rem 0; }
     .player { text-align: center; }
-    .vs { font-size: 2.5rem; font-weight: 800; text-shadow: 0 0 20px rgba(255,255,255,0.5); }
-    .score { font-size: 3rem; font-weight: 700; }
+    .vs { font-size: 2.5rem; font-weight: 800; text-shadow: 0 0 20px rgba(255,255,255,0.5); background: rgba(255,255,255,0.1); padding: 0.5rem 1.5rem; border-radius: 3rem; }
+    .score { font-size: 3rem; font-weight: 700; text-shadow: 0 0 15px hsl(var(--primary) / 0.5); }
     .btn {
       padding: 0.9rem 2rem; border-radius: 2rem; border: none; font-weight: 600; cursor: pointer;
-      background: hsl(var(--primary)); color: white; transition: var(--transition);
+      background: hsl(var(--primary)); color: white; transition: var(--transition); font-size: 0.95rem;
     }
     .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px hsl(var(--primary) / 0.5); }
     .btn-outline { background: transparent; border: 1px solid hsl(var(--border)); color: hsl(var(--foreground)); }
     .reaction-target {
       width: 200px; height: 200px; background: hsl(var(--primary)); border-radius: 50%;
       margin: 2rem auto; display: flex; align-items: center; justify-content: center;
-      font-weight: bold; transition: 0.1s; cursor: pointer;
+      font-weight: bold; font-size: 1.5rem; transition: 0.1s; cursor: pointer;
     }
     .reaction-target.ready { background: hsl(var(--success)); transform: scale(1.05); }
     .reaction-target.waiting { background: hsl(var(--warning)); cursor: not-allowed; }
 
-    /* === WIKI AI (chat) === */
-    .wiki-messages { height: 250px; overflow-y: auto; background: hsl(var(--muted) / 0.3); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; }
-    .wiki-message { margin-bottom: 0.8rem; font-size: 0.9rem; padding: 0.5rem; border-radius: 0.8rem; background: var(--bg-card); border: 1px solid hsl(var(--border)); }
+    /* ===== WIKI AI CHAT ===== */
+    .wiki-messages { height: 260px; overflow-y: auto; background: hsl(var(--muted) / 0.3); border-radius: 0.8rem; padding: 1rem; margin-bottom: 1rem; scroll-behavior: smooth; }
+    .wiki-message { margin-bottom: 0.8rem; font-size: 0.9rem; padding: 0.6rem; border-radius: 0.8rem; background: var(--bg-card); border: 1px solid hsl(var(--border)); }
     .wiki-message.system { background: hsl(var(--primary) / 0.1); border-color: hsl(var(--primary)); }
-    .chat-input { display: flex; gap: 0.5rem; }
 
-    /* === FOOTER === */
-    .footer {
-      background: var(--bg-card); border-top: 1px solid hsl(var(--border));
-      padding: 3rem 1.5rem 1.5rem; margin-top: 3rem;
+    /* ===== CHAT SIDEBAR ===== */
+    .chat-messages { height: 150px; overflow-y: auto; background: hsl(var(--muted) / 0.3); border-radius: 0.8rem; padding: 0.5rem; }
+    .chat-input { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+
+    /* ===== WALLET ===== */
+    .wallet-card { background: linear-gradient(135deg, #059669, #10b981); color: white; border: none; padding: 1.2rem; }
+    .balance { font-size: 2rem; font-weight: 700; margin: 0.5rem 0; }
+
+    /* ===== MODAL (generic) ===== */
+    .modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; z-index: 2000;
     }
-    .footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; max-width: 1440px; margin: 0 auto; }
-    .footer-section h4 { margin-bottom: 1rem; }
-    .footer-section li { list-style: none; margin-bottom: 0.5rem; }
-    .footer-section a { color: var(--text-secondary); text-decoration: none; cursor: pointer; }
-    .footer-section a:hover { color: hsl(var(--primary)); }
+    .modal-content { background: var(--bg-card); border-radius: var(--radius); max-width: 450px; width: 90%; padding: 2rem; border: 1px solid hsl(var(--border)); }
+    .close-btn { float: right; font-size: 2rem; cursor: pointer; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group input, .form-group select { width: 100%; padding: 0.8rem; border-radius: 0.8rem; border: 1px solid hsl(var(--border)); background: hsl(var(--muted)); color: hsl(var(--foreground)); }
 
-    /* === TOAST === */
+    /* ===== TOAST ===== */
     .toast-container { position: fixed; bottom: 2rem; right: 2rem; z-index: 3000; }
     .toast {
       background: var(--bg-card); border-left: 4px solid hsl(var(--primary)); border-radius: 0.8rem;
-      padding: 1rem 1.5rem; margin-bottom: 0.8rem; box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.2);
+      padding: 1rem 1.5rem; margin-bottom: 0.8rem; box-shadow: var(--shadow-lg);
       display: flex; align-items: center; gap: 1rem; animation: slideIn 0.3s;
     }
     @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-    /* === hidden pages === */
+    /* ===== PAGE VISIBILITY ===== */
     .page { display: none; }
     .page.active { display: block; }
-    .glass-card { background: hsl(var(--background) / 0.7); backdrop-filter: blur(12px); border: 1px solid hsl(var(--border) / 0.2); border-radius: var(--radius); }
-    .live-indicator { display: flex; height: 0.75rem; width: 0.75rem; position: relative; }
+
+    /* misc */
+    .spinner { border: 3px solid hsl(var(--border)); border-top-color: hsl(var(--primary)); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 2rem auto; }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <!-- HEADER (merged) -->
+  <!-- ===== HEADER (merged) ===== -->
   <header class="header">
     <div class="logo-area">
       <div class="logo" onclick="app.navigate('home')">ThumbsApp</div>
@@ -254,6 +263,7 @@
           <div class="theme-dot blue" onclick="app.setTheme('blue')"></div>
           <div class="theme-dot pink" onclick="app.setTheme('pink')"></div>
           <div class="theme-dot green" onclick="app.setTheme('green')"></div>
+          <div class="theme-dot purple" onclick="app.setTheme('purple')"></div>
         </div>
         <div class="dropdown-item" onclick="app.toggleDarkMode()"><i class="fas fa-moon"></i> Dark/Light</div>
         <div class="dropdown-item" onclick="app.logout()" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</div>
@@ -262,21 +272,31 @@
     </div>
   </header>
 
-  <!-- MAIN GRID (three columns) -->
+  <!-- ===== THREE‑COLUMN GRID ===== -->
   <div class="main-grid">
-    <!-- LEFT SIDEBAR -->
+    <!-- LEFT SIDEBAR (social, gaming) -->
     <aside class="left-sidebar sidebar">
-      <div class="sidebar-section"><div class="sidebar-title">Social</div>
-        <div class="sidebar-item" onclick="app.showFriends()"><i class="fas fa-user-friends"></i> Friends <span class="badge side" id="friendsBadge">0</span></div>
-        <div class="sidebar-item" onclick="app.showMessages()"><i class="fas fa-comment"></i> Messages <span class="badge side" id="messagesBadge">0</span></div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Social</div>
+        <div class="sidebar-item" onclick="app.showFriends()"><i class="fas fa-user-friends"></i> Friends <span class="badge side" id="friendsBadge">2</span></div>
+        <div class="sidebar-item" onclick="app.showMessages()"><i class="fas fa-comment"></i> Messages <span class="badge side" id="messagesBadge">5</span></div>
+        <div class="sidebar-item" onclick="app.showGroups()"><i class="fas fa-users"></i> Groups</div>
+        <div class="sidebar-item" onclick="app.showEvents()"><i class="fas fa-calendar"></i> Events</div>
       </div>
-      <div class="sidebar-section"><div class="sidebar-title">Gaming</div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Gaming</div>
         <div class="sidebar-item" onclick="app.navigate('arena')"><i class="fas fa-video"></i> Live Arenas <span class="badge side danger" id="liveCount">3</span></div>
         <div class="sidebar-item" onclick="app.navigate('tournaments')"><i class="fas fa-trophy"></i> Tournaments</div>
+        <div class="sidebar-item" onclick="app.showChallenges()"><i class="fas fa-bolt"></i> Challenges</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Business</div>
+        <div class="sidebar-item" onclick="app.showBusiness()"><i class="fas fa-store"></i> Creator Studio</div>
+        <div class="sidebar-item" onclick="app.showAds()"><i class="fas fa-ad"></i> Ad Manager</div>
       </div>
     </aside>
 
-    <!-- MAIN CONTENT (pages) -->
+    <!-- MAIN CENTER (feed, pages) -->
     <main class="feed" id="mainContent">
       <!-- HOME PAGE (with trending news) -->
       <div id="home-page" class="page active">
@@ -284,12 +304,12 @@
           <div class="avatar small" id="postAvatar">P</div>
           <input type="text" placeholder="Create a challenge, share victory..." onclick="app.openCreateModal()">
         </div>
-        <!-- Trending News (dynamic) -->
+        <!-- Trending News dynamic section -->
         <div class="card">
           <h3><i class="fas fa-fire" style="color:hsl(var(--primary));"></i> Trending News</h3>
-          <div class="trengrid" id="trendingNewsContainer"></div>
+          <div class="trending-grid" id="trendingNewsContainer"></div>
         </div>
-        <!-- Feed container -->
+        <!-- Feed posts -->
         <div id="feedContainer"><div class="spinner"></div></div>
         <button class="btn btn-outline" style="width:100%; margin-top:1rem;" onclick="app.loadMore()" id="loadMoreBtn">Load More</button>
       </div>
@@ -297,13 +317,13 @@
       <!-- ARENA PAGE (reaction duel) -->
       <div id="arena-page" class="page">
         <div class="card arena-card">
-          <h2>⚡ REACTION DUEL</h2>
+          <h2>⚡ REACTION DUEL · LIVE</h2>
           <div class="duel-area">
             <div class="player"><div class="avatar large" id="player1Avatar">P</div><h3 id="player1Name">ProGamer</h3><div class="score" id="scoreA">0</div></div>
             <div class="vs">VS</div>
             <div class="player"><div class="avatar large" id="player2Avatar">G</div><h3 id="player2Name">GameMaster</h3><div class="score" id="scoreB">0</div></div>
           </div>
-          <div class="game-controls">
+          <div class="game-controls" style="display:flex; gap:1rem; justify-content:center;">
             <button class="btn" onclick="app.startGame()" id="startGameBtn"><i class="fas fa-play"></i> Start</button>
             <button class="btn" onclick="app.playRound()" id="playRoundBtn" disabled><i class="fas fa-bolt"></i> React!</button>
           </div>
@@ -314,17 +334,20 @@
         </div>
       </div>
 
-      <!-- TOURNAMENTS PAGE (placeholder but functional) -->
+      <!-- TOURNAMENTS PAGE (placeholder with dynamic join simulation) -->
       <div id="tournaments-page" class="page">
-        <div class="card"><h2>🏆 Active Tournaments</h2><div id="tournamentsList"><p class="glass-card" style="padding:2rem; text-align:center;">Join a tournament via home feed</p></div></div>
+        <div class="card">
+          <h2>🏆 Active tournaments</h2>
+          <div id="tournamentsList"><p class="glass-card" style="padding:1rem;">• Speed Chess (8/16) • Reaction Cup (12/16)</p></div>
+        </div>
       </div>
 
       <!-- WIKI AI PAGE (fully working) -->
       <div id="wiki-page" class="page">
         <div class="card">
-          <h2><i class="fas fa-robot"></i> Wiki AI Assistant</h2>
+          <h2><i class="fas fa-robot"></i> Wiki AI assistant</h2>
           <div class="wiki-messages" id="wikiMessages">
-            <div class="wiki-message system"><strong>AI:</strong> Hello! Ask me about games, strategies, or tips.</div>
+            <div class="wiki-message system"><strong>AI:</strong> Ask me about games, strategies, or tips.</div>
           </div>
           <div class="chat-input">
             <input type="text" id="wikiInput" placeholder="e.g., reaction duel tips, chess strategy..." onkeypress="app.handleWikiKeypress(event)">
@@ -334,12 +357,32 @@
       </div>
     </main>
 
-    <!-- RIGHT SIDEBAR (live, wallet, chat) -->
+    <!-- RIGHT SIDEBAR (live, wallet, chat, achievements) -->
     <aside class="right-sidebar sidebar">
-      <div class="sidebar-section"><div class="sidebar-title">Live Now</div><div id="liveStreams"></div></div>
-      <div class="sidebar-section"><div class="sidebar-title">Wallet</div><div class="wallet-card card"><div>Balance</div><div class="balance" id="walletBalance">100 THB</div><button class="btn" style="width:100%;" onclick="app.showDeposit()">Deposit</button></div></div>
-      <div class="sidebar-section"><div class="sidebar-title">Live Chat</div><div class="chat-messages" id="chatMessages" style="height:150px; overflow-y:auto; background:hsl(var(--muted)/0.3); padding:0.5rem; border-radius:0.8rem;"></div><div class="chat-input" style="margin-top:0.5rem;"><input type="text" id="chatInput" placeholder="Chat..." onkeypress="app.handleChatKeypress(event)"><button class="btn" style="padding:0.5rem 1rem;" onclick="app.sendChat()">Send</button></div></div>
-      <div class="sidebar-section"><div class="sidebar-title">Achievements</div><div class="badges-grid" id="achievementsList"></div></div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Live Now</div>
+        <div id="liveStreams"></div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Wallet</div>
+        <div class="wallet-card card">
+          <div>Your balance</div>
+          <div class="balance" id="walletBalance">100 THB</div>
+          <button class="btn" style="width:100%;" onclick="app.showDeposit()">Deposit</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Live Chat</div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="Chat..." onkeypress="app.handleChatKeypress(event)">
+          <button class="btn" style="padding:0.5rem 1rem;" onclick="app.sendChat()">Send</button>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Achievements</div>
+        <div class="badges-grid" id="achievementsList" style="display:flex; gap:0.5rem; flex-wrap:wrap;"></div>
+      </div>
     </aside>
   </div>
 
@@ -351,31 +394,56 @@
       <div class="footer-section"><h4>Platform</h4><ul><li><a onclick="app.navigate('home')">Home</a></li><li><a onclick="app.navigate('arena')">Arena</a></li></ul></div>
       <div class="footer-section"><h4>Legal</h4><ul><li><a onclick="app.showAgeVerification()">Age verification</a></li></ul></div>
     </div>
-    <div style="text-align:center; margin-top:2rem; color:var(--text-secondary);">© 2026 ThumbsApp · unified edition</div>
+    <div style="text-align:center; margin-top:2rem; color:var(--text-secondary);">© 2026 ThumbsApp · three‑column master fusion</div>
   </footer>
 
-  <!-- MODALS (auth, create, donation) simplified but functional -->
-  <div class="modal" id="authModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); z-index:2000; align-items:center; justify-content:center;">
-    <div class="modal-content glass-card" style="max-width:400px; width:90%; padding:2rem;">
-      <div class="modal-header"><h2 id="authTitle">Login</h2><button class="close-btn" onclick="app.closeModal('authModal')" style="background:none; border:none; font-size:2rem;">&times;</button></div>
-      <div id="loginForm"><div class="form-group"><label>Email</label><input type="email" id="loginEmail" class="w-full" style="width:100%; padding:0.8rem;"></div><div class="form-group"><label>Password</label><input type="password" id="loginPassword" style="width:100%; padding:0.8rem;"></div><button class="btn" style="width:100%;" onclick="app.login()">Sign In</button><p style="margin-top:1rem;">Don't have an account? <a onclick="app.showRegister()">Register</a></p></div>
-      <div id="registerForm" style="display:none;"><div class="form-group"><label>Username</label><input id="regUsername" style="width:100%;"></div><div class="form-group"><label>Email</label><input id="regEmail" style="width:100%;"></div><div class="form-group"><label>Password</label><input type="password" id="regPassword" style="width:100%;"></div><button class="btn" style="width:100%;" onclick="app.register()">Create</button></div>
+  <!-- MODALS (auth, create, donation) -->
+  <div class="modal" id="authModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="app.closeModal('authModal')">&times;</span>
+      <h2 id="authTitle">Login</h2>
+      <div id="loginForm">
+        <div class="form-group"><label>Email</label><input type="email" id="loginEmail"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="loginPassword"></div>
+        <button class="btn" style="width:100%;" onclick="app.login()">Sign In</button>
+        <p style="margin-top:1rem;">No account? <a onclick="app.showRegister()">Register</a></p>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="form-group"><label>Username</label><input id="regUsername"></div>
+        <div class="form-group"><label>Email</label><input id="regEmail"></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPassword"></div>
+        <button class="btn" style="width:100%;" onclick="app.register()">Create</button>
+      </div>
     </div>
   </div>
-  <div class="modal" id="createModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); align-items:center; justify-content:center;">
-    <div class="modal-content glass-card" style="max-width:400px; padding:2rem;"><h2>Create Challenge</h2><input type="text" id="challengeTitle" placeholder="Title" style="width:100%; margin:0.5rem 0;"><input type="number" id="challengeEntryFee" value="10" style="width:100%;"><button class="btn" onclick="app.createPost()">Post</button></div>
+  <div class="modal" id="createModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="app.closeModal('createModal')">&times;</span>
+      <h2>Create challenge</h2>
+      <input type="text" id="challengeTitle" placeholder="Title" style="width:100%; margin:0.5rem 0;">
+      <input type="number" id="challengeEntryFee" value="10" style="width:100%;">
+      <button class="btn" style="margin-top:1rem;" onclick="app.createPost()">Post</button>
+    </div>
   </div>
-  <div class="modal" id="donationModal" style="display:none; inset:0; position:fixed; background:rgba(0,0,0,0.7); align-items:center; justify-content:center;"><div class="modal-content glass-card" style="padding:2rem;"><h3>Donate</h3><input type="number" id="donateAmount" value="10"><button onclick="app.donate()">Send</button></div></div>
+  <div class="modal" id="donationModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="app.closeModal('donationModal')">&times;</span>
+      <h3>Donate</h3>
+      <input type="number" id="donateAmount" value="10" style="width:100%;">
+      <button class="btn" style="margin-top:1rem;" onclick="app.donate()">Send</button>
+    </div>
+  </div>
 
   <!-- TOAST CONTAINER -->
   <div class="toast-container" id="toastContainer"></div>
 
   <script>
     (function() {
-      // ---------- DATABASE (merged mock data) ----------
+      // ---------- ENHANCED MOCK DATABASE (full backend simulation) ----------
       class Database {
         constructor() {
-          this.users = new Map(); this.posts = new Map(); this.tournaments = new Map(); this.achievements = new Map();
+          this.users = new Map(); this.posts = new Map(); this.tournaments = new Map();
+          this.achievements = new Map(); this.transactions = [];
           this.initSample();
         }
         initSample() {
@@ -391,38 +459,42 @@
         getPosts(limit, offset) { return Array.from(this.posts.values()).sort((a,b)=>b.timestamp-a.timestamp).slice(offset, offset+limit); }
         createPost(p) { p.id=Date.now()+''; p.timestamp=Date.now(); p.likes=0; p.comments=0; this.posts.set(p.id, p); return p; }
         likePost(id) { let p=this.posts.get(id); if(p){p.likes++;} return p; }
+        addTransaction(t) { this.transactions.push(t); }
       }
-      // ---------- GAME ENGINE (reaction) ----------
+
+      // ---------- GAME ENGINE ----------
       class GameEngine {
         constructor() { this.activeGames=new Map(); }
         createGame(p1,p2,fee=10) { let id='game'+Date.now(); let g={id, player1:p1,player2:p2,score1:0,score2:0, status:'active', entryFee:fee, winner:null}; this.activeGames.set(id,g); return g; }
         playRound(id,pid) { let g=this.activeGames.get(id); if(!g||g.status!='active') return null; let score=Math.floor(Math.random()*8)+2; if(pid===g.player1.id) g.score1+=score; else g.score2+=score; if(g.score1>=50||g.score2>=50) { g.status='finished'; g.winner=g.score1>=50?g.player1:g.player2; } return g; }
       }
-      // ---------- WIKI AI ENGINE (realistic answers) ----------
+
+      // ---------- WIKI AI ENGINE ----------
       class WikiAI {
-        constructor() { this.kb={ 'reaction duel tips':'Focus on peripheral vision. Pro avg 180ms.','speed chess':'Use premoves and practice endgames.','memory match':'Use loci method.','tournament':'Check in 1h early.' }; }
-        query(q) {
-          q=q.toLowerCase(); let ans='I found info about gaming.'; for(let k in this.kb) if(q.includes(k.split(' ')[0])) ans=this.kb[k];
-          return { answer:ans, sources:['wiki'], time:120 };
-        }
+        constructor() { this.kb={ 'reaction duel':'Focus on peripheral vision. Pro avg 180ms.','speed chess':'Use premoves, manage time.','memory match':'Loci method helps.','tournament':'Check in early.' }; }
+        query(q) { q=q.toLowerCase(); let ans='I found gaming info.'; for(let k in this.kb) if(q.includes(k.split(' ')[0])) ans=this.kb[k]; return { answer:ans, sources:['wikiKB'], time:95 }; }
       }
 
-      // ---------- MAIN APP (merged from all three files) ----------
+      // ---------- MAIN APP (THREE COLUMN + ALL FEATURES) ----------
       window.app = new class ThumbsApp {
         constructor() {
           this.db = new Database(); this.gameEngine = new GameEngine(); this.wikiAI = new WikiAI();
           this.currentUser = null; this.currentPage = 'home'; this.postOffset = 0; this.postsPerPage = 3;
-          this.currentGameId = null; this.reactionTargetTimeout = null; this.reactionStart = null;
-          this.chatHistory = []; this.newsArticles = [
+          this.currentGameId = null; this.reactionTargetTimeout = null; this.reactionStart = 0;
+          this.chatHistory = [
+            {user:'ProGamer', msg:'gg'}, {user:'GameMaster', msg:'wp'}
+          ];
+          this.newsArticles = [
             { title:'ProGamer wins 10k THB', source:'ESPN', time:'2h' },
-            { title:'Memory Match update', source:'GameSpot', time:'5h' },
-            { title:'Reaction Duel 2.0 beta', source:'Thumbs', time:'1d' }
+            { title:'Memory Match 2.0 released', source:'GameSpot', time:'5h' },
+            { title:'Reaction Duel new map', source:'Thumbs', time:'1d' },
+            { title:'Chess tourney this weekend', source:'Gaming Weekly', time:'3h' }
           ];
           this.init();
         }
         init() {
           this.checkAuth(); this.renderFeed(); this.updateSidebars(); this.renderTrendingNews(); this.setupListeners();
-          setInterval(()=>this.updateLiveStreams(), 15000); setInterval(()=>this.updateViewerCount(), 10000);
+          setInterval(()=>this.updateLiveStreams(), 15000); setInterval(()=>this.updateViewerCount(), 8000);
         }
         setupListeners() { window.onclick=(e)=> { if(!e.target.closest('.user-menu')) document.getElementById('userDropdown')?.classList.remove('show'); }; }
         checkAuth() { let saved=localStorage.getItem('thumbsapp_user'); if(saved) { this.currentUser=JSON.parse(saved); this.updateUIForAuth(); }
@@ -430,56 +502,48 @@
         }
         updateUIForAuth() {
           let u=this.currentUser; let avInitial=document.getElementById('avatarInitial'); let postAv=document.getElementById('postAvatar');
-          if(u) { avInitial.textContent=u.username[0].toUpperCase(); if(postAv) postAv.textContent=u.username[0]; 
-            document.getElementById('walletBalance').innerText=u.balance+' THB'; document.getElementById('player1Name').innerText=u.username;
-            let opp=Array.from(this.db.users.values()).find(x=>x.id!==u.id); if(opp) { document.getElementById('player2Name').innerText=opp.username; }
+          if(u) {
+            avInitial.textContent=u.username[0].toUpperCase(); if(postAv) postAv.textContent=u.username[0];
+            document.getElementById('walletBalance').innerText=u.balance+' THB';
+            document.getElementById('player1Name').innerText=u.username;
+            let opp=Array.from(this.db.users.values()).find(x=>x.id!==u.id);
+            if(opp) { document.getElementById('player2Name').innerText=opp.username; document.getElementById('player2Avatar').innerText=opp.username[0]; }
             document.getElementById('loginBtn').style.display='none'; document.getElementById('logoutBtn').style.display='flex';
           } else {
             avInitial.textContent='G'; document.getElementById('walletBalance').innerText='0 THB';
             document.getElementById('loginBtn').style.display='flex'; document.getElementById('logoutBtn').style.display='none';
           }
         }
-        navigate(p) {
-          document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-          document.getElementById(p+'-page').classList.add('active');
-          this.currentPage=p; if(p==='wiki') this.renderWiki();
-        }
-        renderFeed() {
-          let cont=document.getElementById('feedContainer'); if(!cont) return;
-          let posts=this.db.getPosts(this.postsPerPage, this.postOffset);
-          if(posts.length===0) { cont.innerHTML='<div class="card">No posts yet</div>'; return; }
-          let html=''; for(let p of posts) { html+=`<div class="card"><div class="post-header"><div class="avatar small">${p.author[0]}</div><div><h4>${p.author}</h4><span>${this.formatTime(p.timestamp)}</span></div></div><div>${p.content}</div><div><span class="difficulty-badge ${p.difficulty}">${p.difficulty}</span></div><div class="post-actions"><div class="post-action" onclick="app.likePost('${p.id}')"><i class="fas fa-thumbs-up"></i> ${p.likes}</div><div class="post-action" onclick="app.joinChallenge('${p.id}')">Join</div></div></div>`; }
-          cont.innerHTML=html;
-        }
+        navigate(p) { document.querySelectorAll('.page').forEach(el=>el.classList.remove('active')); document.getElementById(p+'-page').classList.add('active'); this.currentPage=p; if(p==='wiki') this.renderWiki(); }
+        renderFeed() { let cont=document.getElementById('feedContainer'); if(!cont) return; let posts=this.db.getPosts(this.postsPerPage, this.postOffset); if(posts.length===0) { cont.innerHTML='<div class="card">No posts yet</div>'; return; } let html=''; for(let p of posts) { html+=`<div class="card"><div class="post-header"><div class="avatar small">${p.author[0]}</div><div><h4>${p.author}</h4><span>${this.formatTime(p.timestamp)}</span></div></div><div>${p.content}</div><div><span class="difficulty-badge ${p.difficulty}">${p.difficulty}</span></div><div class="post-actions"><div class="post-action" onclick="app.likePost('${p.id}')"><i class="fas fa-thumbs-up"></i> ${p.likes}</div><div class="post-action" onclick="app.joinChallenge('${p.id}')">Join</div></div></div>`; } cont.innerHTML=html; }
         likePost(id) { this.db.likePost(id); this.renderFeed(); this.showToast('Liked!'); }
-        joinChallenge(id) { if(!this.currentUser) { this.showLogin(); return; } let post=this.db.posts.get(id); if(post&&post.entryFee<=this.currentUser.balance) { this.db.createTransaction?.({userId:this.currentUser.id, amount:post.entryFee}); this.showToast('Joined challenge!'); } else this.showToast('insufficient balance','error'); }
+        joinChallenge(id) { if(!this.currentUser) { this.showLogin(); return; } let post=this.db.posts.get(id); if(post&&post.entryFee<=this.currentUser.balance) { this.db.addTransaction({userId:this.currentUser.id, amount:post.entryFee}); this.currentUser.balance-=post.entryFee; this.updateUIForAuth(); this.showToast('Joined challenge!'); } else this.showToast('insufficient balance','error'); }
         createPost() { if(!this.currentUser) { this.showLogin(); return; } let title=document.getElementById('challengeTitle')?.value||'demo'; let fee=parseInt(document.getElementById('challengeEntryFee')?.value)||10; let p=this.db.createPost({userId:this.currentUser.id, author:this.currentUser.username, content:title, game:'Reaction Duel', entryFee:fee, difficulty:'beginner'}); this.postOffset=0; this.renderFeed(); this.closeModal('createModal'); this.showToast('Challenge created'); }
         loadMore() { this.postOffset+=this.postsPerPage; this.renderFeed(); }
 
-        // Trending News dynamic
+        // Trending News
         renderTrendingNews() { let cont=document.getElementById('trendingNewsContainer'); if(cont) cont.innerHTML=this.newsArticles.map(n=>`<div class="news-item" onclick="app.showToast('${n.title}')"><h4>🔥 ${n.title}</h4><p>${n.source} · ${n.time}</p></div>`).join(''); }
 
         // WIKI AI
         askWiki() { let inp=document.getElementById('wikiInput'); let q=inp.value.trim(); if(!q) return; let msgBox=document.getElementById('wikiMessages'); msgBox.innerHTML+=`<div class="wiki-message"><strong>You:</strong> ${q}</div>`; inp.value=''; let res=this.wikiAI.query(q); setTimeout(()=>{ msgBox.innerHTML+=`<div class="wiki-message system"><strong>AI:</strong> ${res.answer} <small>${res.time}ms</small></div>`; msgBox.scrollTop=msgBox.scrollHeight; },300); }
         handleWikiKeypress(e) { if(e.key==='Enter') this.askWiki(); }
 
-        // ARENA reaction game
+        // ARENA reaction
         startGame() { if(!this.currentUser) { this.showLogin(); return; } let opp=Array.from(this.db.users.values()).find(u=>u.id!==this.currentUser.id); if(!opp){ this.showToast('no opponent'); return; } let g=this.gameEngine.createGame(this.currentUser, opp, 10); this.currentGameId=g.id; document.getElementById('startGameBtn').disabled=true; document.getElementById('playRoundBtn').disabled=false; document.getElementById('reactionGameArea').style.display='block'; this.startReactionRound(); }
         startReactionRound() { let t=document.getElementById('reactionTarget'); t.classList.add('waiting'); t.innerText='WAIT'; clearTimeout(this.reactionTargetTimeout); this.reactionTargetTimeout=setTimeout(()=>{ t.classList.remove('waiting'); t.classList.add('ready'); t.innerText='CLICK!'; this.reactionStart=Date.now(); }, Math.random()*2000+1000); }
         handleReaction() { if(!this.currentGameId) return; let t=document.getElementById('reactionTarget'); if(t.classList.contains('ready')) { let rt=Date.now()-this.reactionStart; this.playRound(rt); t.classList.remove('ready'); this.startReactionRound(); } else { this.showToast('Too early!','error'); clearTimeout(this.reactionTargetTimeout); this.startReactionRound(); } }
-        playRound(rt) { let g=this.gameEngine.playRound(this.currentGameId, this.currentUser.id); if(g) { document.getElementById('scoreA').innerText=g.score1; document.getElementById('scoreB').innerText=g.score2; if(g.status==='finished') { document.getElementById('startGameBtn').disabled=false; document.getElementById('playRoundBtn').disabled=true; document.getElementById('reactionGameArea').style.display='none'; let win=(g.winner?.id===this.currentUser.id); let prize=g.entryFee*2*0.9; if(win) { this.currentUser.balance+=prize; this.showToast(`You win +${prize} THB`,'success'); } else this.showToast('You lose','error'); this.updateUIForAuth(); } }
-        }
+        playRound(rt) { let g=this.gameEngine.playRound(this.currentGameId, this.currentUser.id); if(g) { document.getElementById('scoreA').innerText=g.score1; document.getElementById('scoreB').innerText=g.score2; if(g.status==='finished') { document.getElementById('startGameBtn').disabled=false; document.getElementById('playRoundBtn').disabled=true; document.getElementById('reactionGameArea').style.display='none'; let win=(g.winner?.id===this.currentUser.id); let prize=g.entryFee*2*0.9; if(win) { this.currentUser.balance+=prize; this.showToast(`You win +${prize} THB`,'success'); } else this.showToast('You lose','error'); this.updateUIForAuth(); } } }
 
         // Chat
         sendChat() { let inp=document.getElementById('chatInput'); let msg=inp.value.trim(); if(!msg||!this.currentUser) return; this.chatHistory.push({user:this.currentUser.username, msg}); inp.value=''; this.updateChat(); }
         handleChatKeypress(e) { if(e.key==='Enter') this.sendChat(); }
         updateChat() { let cont=document.getElementById('chatMessages'); if(!cont) return; cont.innerHTML=this.chatHistory.slice(-5).map(c=>`<div><strong>${c.user}:</strong> ${c.msg}</div>`).join(''); }
 
-        // Sidebars
+        // Sidebars dynamic
         updateSidebars() { this.updateLiveStreams(); this.updateLeaderboardSidebar(); this.updateChat(); this.updateAchievements(); }
-        updateLiveStreams() { let cont=document.getElementById('liveStreams'); let lc=document.getElementById('liveCount'); if(cont) cont.innerHTML=`<div class="sidebar-item" onclick="app.navigate('arena')"><span class="live-badge" style="background:red; color:white; padding:2px 6px; border-radius:12px;">LIVE</span> Reaction Duel <span style="margin-left:auto;">45</span></div><div class="sidebar-item">Speed Chess <span>32</span></div>`; if(lc) lc.innerText='2'; }
+        updateLiveStreams() { let cont=document.getElementById('liveStreams'); let lc=document.getElementById('liveCount'); if(cont) cont.innerHTML=`<div class="sidebar-item" onclick="app.navigate('arena')"><span class="live-badge">LIVE</span> Reaction Duel <span style="margin-left:auto;">45</span></div><div class="sidebar-item"><span class="live-badge">LIVE</span> Speed Chess <span>32</span></div>`; if(lc) lc.innerText='2'; }
         updateLeaderboardSidebar() { let cont=document.getElementById('sidebarLeaderboard'); if(cont) cont.innerHTML=`<div class="leaderboard-item"><span>1. ProGamer</span><span>12450</span></div><div class="leaderboard-item"><span>2. GameMaster</span><span>11230</span></div>`; }
-        updateAchievements() { let cont=document.getElementById('achievementsList'); let achs=Array.from(this.db.achievements.values()).slice(0,3); if(cont) cont.innerHTML=achs.map(a=>`<div class="badge-item">${a.icon} ${a.name}</div>`).join(''); }
+        updateAchievements() { let cont=document.getElementById('achievementsList'); let achs=Array.from(this.db.achievements.values()).slice(0,3); if(cont) cont.innerHTML=achs.map(a=>`<div class="badge-item" style="background:hsl(var(--muted)); padding:0.4rem 0.8rem; border-radius:2rem;">${a.icon} ${a.name}</div>`).join(''); }
 
         // Auth
         showLogin() { document.getElementById('authModal').style.display='flex'; document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none'; }
@@ -492,7 +556,7 @@
         showSettings() { this.showToast('Settings panel'); }
         toggleDarkMode() { document.body.classList.toggle('dark'); }
         setTheme(c) { this.showToast('Theme '+c); }
-        showDeposit() { this.showToast('Deposit modal (simulated)'); }
+        showDeposit() { this.showToast('Deposit modal (sim)'); }
         showDonation() { document.getElementById('donationModal').style.display='flex'; }
         donate() { let am=document.getElementById('donateAmount')?.value; if(am&&this.currentUser) { this.currentUser.balance-=parseInt(am); this.updateUIForAuth(); this.closeModal('donationModal'); this.showToast('Donated'); } }
         openCreateModal() { if(!this.currentUser) this.showLogin(); else document.getElementById('createModal').style.display='flex'; }
@@ -503,12 +567,17 @@
         showMessages() { this.showToast('Messages'); }
         showNotif() { this.showToast('🔔 Notifications'); }
         showFriends() { this.showToast('Friends list'); }
+        showGroups() { this.showToast('Groups'); }
+        showEvents() { this.showToast('Events'); }
+        showChallenges() { this.showToast('Challenges'); }
+        showBusiness() { this.showToast('Creator Studio'); }
+        showAds() { this.showToast('Ad manager'); }
         showHelp() { this.showToast('Help'); }
         showTerms() { this.showToast('Terms'); }
         showPrivacy() { this.showToast('Privacy'); }
-        showAgeVerification() { this.showToast('Age verified: 18+'); }
+        showAgeVerification() { this.showToast('18+ verified'); }
         updateViewerCount() { let v=document.getElementById('viewerCount'); if(v) v.innerText=Math.floor(Math.random()*300+200); }
-        search(v) { if(v.length>2) this.showToast('Search for "'+v+'"'); }
+        search(v) { if(v.length>2) this.showToast('Searching "'+v+'"'); }
       };
     })();
   </script>
